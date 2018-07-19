@@ -1,4 +1,5 @@
 import {SceneManager} from "./ui/SceneManager"
+import {World} from "./world/World"
 import * as THREE from "three";
 declare const webGlDiv:HTMLDivElement;
 var scene: THREE.Scene;
@@ -6,6 +7,7 @@ var camera: THREE.PerspectiveCamera;
 var renderer: THREE.WebGLRenderer;
 var sceneManager:SceneManager;
 var stats:Stats;
+var world:World;
 
 
 
@@ -36,7 +38,7 @@ function initialize(){
  document.body.appendChild( stats.dom );
  sceneManager = new SceneManager(scene);
  //editor = new Editor(webGlDiv);
-// engine = new Engine();
+ world = new World();
 
 
  animate();
@@ -56,7 +58,7 @@ function animate() {
 	requestAnimationFrame( animate );
 
 //	editor.animate();
-//	engine.tickUpdate();
+	world.tickUpdate();
 sceneManager.updateObjects([{id:1, posX:1, posY:1, type:1}]);//TODO put actual objects
 	stats.update();
 
