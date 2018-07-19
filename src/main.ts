@@ -9,6 +9,8 @@ var sceneManager:SceneManager;
 var stats:Stats;
 var world:World;
 
+const VISIBLE_DISTANCE = 100;
+
 
 
 function initialize(){
@@ -39,6 +41,7 @@ function initialize(){
  sceneManager = new SceneManager(scene);
  //editor = new Editor(webGlDiv);
  world = new World();
+ world.load();
 
 
  animate();
@@ -59,7 +62,7 @@ function animate() {
 
 //	editor.animate();
 	world.tickUpdate();
-sceneManager.updateObjects([{id:1, posX:1, posY:1, type:1}]);//TODO put actual objects
+sceneManager.updateObjects(world.getSceneObjectsNearXY(camera.position.x, camera.position.y, VISIBLE_DISTANCE));//TODO put actual objects
 	stats.update();
 
 	renderer.render( scene, camera );

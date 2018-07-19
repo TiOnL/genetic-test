@@ -42,4 +42,25 @@ export class CircularList<T>{
     }
   }
 
+  public forEach(func:(node:T)=>void){
+    var startNode = this.lastAddedNode;
+    if(!startNode)return;
+    func(startNode.value);
+    var node = startNode.next;
+    while(node != startNode){
+      func(node.value);
+      node = node.next;
+    }
+  }
+
+  public filterToArray(func:(value:T)=>boolean):T[]{
+    var result:T[] = [];
+    this.forEach((elem)=>{
+      if(func(elem)){
+        result.push(elem);
+      }
+    });
+    return result;
+  }
+
 }
