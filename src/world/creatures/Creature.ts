@@ -6,6 +6,7 @@ export class Creature implements Entity{
   public posX = 0;
   public posY = 0;
   public visionRadius = 10;
+  public isAlive = true;
 
   process(nearEntities:Entity[]){
 

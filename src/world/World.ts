@@ -41,6 +41,9 @@ export class World{
         var creature = currentNode.value;
         var nearEntities = this.getNearEntities(creature.posX, creature.posY, creature.visionRadius, creature);
         creature.process(nearEntities);
+        if (!creature.isAlive){
+          this.creatures.delete(currentNode);
+        }
         currentNode = currentNode.next;
       }
       this.currentCreatureNode = currentNode;

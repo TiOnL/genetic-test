@@ -63,4 +63,14 @@ export class CircularList<T>{
     return result;
   }
 
+  public delete(node:CircularListNode<T>){
+    this.size--;
+    if(this.size>0){
+      node.prev.next = node.next;
+      node.next.prev = node.prev;
+    }else{
+      this.lastAddedNode = undefined;
+    }
+  }
+
 }
