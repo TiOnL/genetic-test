@@ -10,7 +10,7 @@ const SELF_STATS_INFO_LENGTH = 10;
 const MAX_AGE = 100;
 const MAX_SPEED = 1;
 
-class Rabbit extends Creature{
+export class Rabbit extends Creature{
   private chromosome:Chromosome;
   private healthPoints:number;
   private fill:number;

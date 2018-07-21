@@ -1,7 +1,8 @@
-import {Creature} from "./creatures/Creature";
+import {Creature, Rabbit} from "./creatures/creatures";
 import {SceneObject} from "../common/common";
 import {CircularList, CircularListNode} from "../common/common";
 import {Entity} from "./Entity";
+import {Neural3L} from "../chromosomes/chromosomes";
 
 export class World{
   private processCreaturesQuotaPerTick = 0.1;
@@ -26,7 +27,7 @@ export class World{
   }
 
   public load(){
-    var creature = new Creature()
+    var creature = new Rabbit(0,new Neural3L());
     creature.type = 1;
     creature.posX = 1;
     creature.posY = 2;
