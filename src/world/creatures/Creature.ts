@@ -1,4 +1,5 @@
-import {Entity, EntityTypes} from "../Entity";
+import {Entity} from "../Entity";
+import {EntityTypes} from "../../common/common";
 
 export class Creature implements Entity{
   public id = 0;

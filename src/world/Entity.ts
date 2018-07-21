@@ -4,7 +4,3 @@ export interface Entity{
   posX:number;
   posY:number;
 }
-
-export namespace EntityTypes {
-    export const UNKNOWN = 0;
-}

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {SceneObject} from "../common/common"
+import {SceneObject, EntityTypes} from "../common/common";
 
 export class SceneManager{
   private scene:THREE.Scene;
@@ -33,7 +33,7 @@ export class SceneManager{
   }
 
   private createMesh(objectType:number){
-    if(objectType == SceneObject.TYPE_RABBIT){
+    if(objectType === EntityTypes.RABBIT_F || objectType === EntityTypes.RABBIT_M ){
       var mesh = new THREE.Mesh(new THREE.SphereGeometry(0.3),new THREE.MeshLambertMaterial( {
               color: 0x118855 }) );
     }else{
