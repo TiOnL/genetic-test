@@ -9,6 +9,8 @@ export class Creature implements Entity{
   public visionRadius = 10;
   public isAlive = true;
 
+  public onObjectPickup = function(entity:Entity){throw new Error("You should override onObjectPickup()")};
+
   process(nearEntities:Entity[]){
 
   }
