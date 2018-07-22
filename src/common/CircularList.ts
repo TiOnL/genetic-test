@@ -65,7 +65,10 @@ export class CircularList<T>{
 
   public delete(node:CircularListNode<T>){
     this.size--;
-    if(this.size>0){
+    if(this.lastAddedNode === node){
+      this.lastAddedNode = this.lastAddedNode.prev;
+    }
+    if(this.size > 0){
       node.prev.next = node.next;
       node.next.prev = node.prev;
     }else{

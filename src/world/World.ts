@@ -5,7 +5,7 @@ import {Entity} from "./Entity";
 import {Neural3L} from "../chromosomes/chromosomes";
 
 export class World{
-  private processCreaturesQuotaPerTick = 0.1;
+  private processCreaturesQuotaPerTick = 0.3;
   private creatures:CircularList<Creature>;
   private currentCreatureNode:CircularListNode<Creature>|undefined;
 
@@ -27,10 +27,14 @@ export class World{
   }
 
   public load(){
-    var creature = new Rabbit(0,options=>new Neural3L(options).randomize());
-    creature.posX = 1;
-    creature.posY = 2;
-    this.creatures.add(creature);
+    for(var i=0; i<500; i++){
+      var creature = new Rabbit(0,options=>new Neural3L(options).randomize());
+      creature.id = i;
+      creature.posX = Math.random()*150;
+      creature.posY = Math.random()*50;
+      this.creatures.add(creature);
+    }
+
   }
 
   private processCreatures(){
@@ -46,7 +50,12 @@ export class World{
         }
         currentNode = currentNode.next;
       }
-      this.currentCreatureNode = currentNode;
+      if(this.creatures.getSize() === 0){
+        this.currentCreatureNode  = undefined;
+      }else{
+        this.currentCreatureNode = currentNode;
+      }
+
     }
   }
 
