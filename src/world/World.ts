@@ -27,7 +27,7 @@ export class World{
   }
 
   public load(){
-    var creature = new Rabbit(0,new Neural3L());
+    var creature = new Rabbit(0,options=>new Neural3L(options).randomize());
     creature.posX = 1;
     creature.posY = 2;
     this.creatures.add(creature);

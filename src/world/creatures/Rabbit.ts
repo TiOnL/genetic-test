@@ -6,12 +6,13 @@ import {Chromosome} from "../../chromosomes/Chromosome"
 const CHROMOSOME_INPUT_LENGHT = 100;
 const MAX_VISIBLE_OBJECTS_COUNT = 10;
 const MAX_AGE = 500;
-const MAX_SPEED = 1;
+const MAX_SPEED = 0.2;
 const MAX_HP = 100;
 const MAX_FILL = 100;
 const MAX_GESTATION_TIME = 10;
 
 const GRASS_FILL_POINTS = 20;
+const CHROMOSOME_OUTPUT_LENGTH = 21;
 
 export class Rabbit extends Creature{
   private chromosome:Chromosome;
@@ -26,9 +27,13 @@ export class Rabbit extends Creature{
   private chromosomeInput:Float32Array;
 
 
-  constructor(sex:number, chromosome:Chromosome){
+  constructor(sex:number, chromosomeFactory:(options:any)=>Chromosome){
     super();
-    this.chromosome = chromosome;
+    this.chromosome = chromosomeFactory({
+       inputSize:CHROMOSOME_INPUT_LENGHT,
+       innerSize:CHROMOSOME_OUTPUT_LENGTH,
+       outputSize:CHROMOSOME_OUTPUT_LENGTH
+     });
     this.type = (sex)?EntityTypes.RABBIT_M:EntityTypes.RABBIT_F;
     this.healthPoints = MAX_HP;
     this.fill = MAX_FILL;
@@ -56,13 +61,13 @@ export class Rabbit extends Creature{
       return (adx*adx + ady*ady) - (bdx*bdx + bdy*bdy);
     });
     this.prepareInputs(nearEntities);
-    this.chromosome.setInput(this.chromosomeInput, 0);
+    this.chromosome.setInput(this.chromosomeInput.buffer, 0);
     var outputBuffer = this.chromosome.process();
     var output = new Float32Array(outputBuffer);
     var moveX = output[0];
     var moveY = output[1];
     var operation = findMaxElementIndex(output, 2, 10) - 2;
-    var param = findMaxElementIndex(output, 11, 20) - 11;
+    var param = findMaxElementIndex(output, 11, CHROMOSOME_OUTPUT_LENGTH - 1) - 11;
     this.processOperation(operation, param, nearEntities);
     this.move(moveX, moveY);
   }

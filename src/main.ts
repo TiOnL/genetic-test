@@ -18,7 +18,7 @@ function initialize(){
  // camera
  camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0.1, 10000 );
  camera.up = new THREE.Vector3( 0, 0, 1 );
- camera.position.set( 10, 5, 10 );
+ camera.position.set( 10, 5, 60 );
  camera.lookAt(0,0,0);
  // lights
  scene.add( new THREE.AmbientLight( 0x333333 ) );
