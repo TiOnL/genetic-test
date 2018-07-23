@@ -18,8 +18,8 @@ function initialize(){
  // camera
  camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0.1, 10000 );
  camera.up = new THREE.Vector3( 0, 0, 1 );
- camera.position.set( 30, 30, 200 );
- camera.lookAt(20,20,0);
+ camera.position.set( 50, 50, 250 );
+ camera.lookAt(40,40,0);
  // lights
  scene.add( new THREE.AmbientLight( 0x333333 ) );
  renderer = new THREE.WebGLRenderer( { antialias: true } );

@@ -57,17 +57,53 @@ export class Neural3L implements Chromosome{
   };
 
   randomize(){
+    this.iterateData((value)=>{
+      return Math.random()-0.5;
+    });
+    return this;
+  }
+
+  public getDataAsArray():number[]{
+    var res:number[] = [];
+    this.iterateData((value)=>{
+      res.push(value);
+      return value;
+    });
+    return res;
+  }
+
+  public setDataFromArray(data:number[]){
+    var dataIndex = 0;
+    this.iterateData((value)=>{
+      return data[dataIndex++];
+    });
+  }
+
+  cross(chromosome:Neural3L){
+    var options = {inputSize:this.inputSize, innerSize:this.innerLayerSize, outputSize:this.outputSize};
+    var newChromosome = new Neural3L(options);
+    var data1 = this.getDataAsArray();
+    var data2 = chromosome.getDataAsArray();
+    var crossIndexes = [Math.floor(Math.random()*data1.length),
+                        Math.floor(Math.random()*data1.length)].sort();
+    for(var i = crossIndexes[0]; i< crossIndexes[1]; i++){
+      data1[i] = data2[i];
+    }
+    newChromosome.setDataFromArray(data1);
+    return newChromosome;
+  }
+
+  private iterateData(callback:(element:number)=>number){
     for (var i = 0; i < this.innerLayerSize; i++){
       for(var j = 0; j< this.M1[i].length; j++){
-        this.M1[i][j] = Math.random()-0.5;
+        this.M1[i][j] = callback(this.M1[i][j]);
       }
     }
     for (var i = 0; i < this.outputSize; i++){
       for(var j = 0; j< this.M2[i].length; j++){
-        this.M2[i][j] = Math.random()-0.5;
+        this.M2[i][j] = callback(this.M2[i][j]);
       }
     }
-    return this;
   }
 
 }

@@ -21,14 +21,14 @@ export class World{
   public tickUpdate(){
     this.processCreatures();
 
-    if(this.tickNumber % 3 === 0){
+    if(this.tickNumber % 2 === 0){
       var grassFood:Entity = {
         id:this.idFactory.generateId(),
         type: EntityTypes.FOOD_GRASS,
-        posX:Math.random()*50,
-        posY:Math.random()*50
+        posX:Math.random()*60,
+        posY:Math.random()*60
       }
-      this.items.push(grassFood);  
+      this.items.push(grassFood);
     }
     this.tickNumber ++;
   }
@@ -43,15 +43,15 @@ export class World{
 
   public load(){
     for(var i=0; i < 500; i++){
-      var creature = new Rabbit(0,options=>new Neural3L(options).randomize());
-      creature.id = this.idFactory.generateId();
+      var creature = new Rabbit(Math.round(Math.random()),
+            ()=>this.idFactory.generateId(),
+            (options)=>new Neural3L(options).randomize());
       creature.posX = Math.random()*50;
       creature.posY = Math.random()*50;
-      creature.onObjectPickup = this.deleteItem.bind(this);
-      this.creatures.add(creature);
+      this.addCreature(creature);
     }
 
-    for(var i=0; i < 20; i++){
+    for(var i=0; i < 100; i++){
       var grassFood:Entity = {
         id:this.idFactory.generateId(),
         type: EntityTypes.FOOD_GRASS,
@@ -105,6 +105,12 @@ export class World{
     }
     this.items[foundIndex] = this.items[this.items.length -1];
     this.items.pop();
+  }
+
+  private addCreature(creature:Creature){
+    creature.onCreatureMade = this.addCreature.bind(this);
+    creature.onObjectPickup = this.deleteItem.bind(this);
+    this.creatures.add(creature);
   }
 
 }

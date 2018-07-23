@@ -6,12 +6,14 @@ import {Chromosome} from "../../chromosomes/Chromosome"
 const CHROMOSOME_INPUT_LENGHT = 100;
 const MAX_VISIBLE_OBJECTS_COUNT = 10;
 const MAX_AGE = 500;
-const MAX_SPEED = 0.2;
-const MAX_HP = 100;
+const MIN_SEX_AGE = 100;
+const MAX_SPEED = 0.3;
+const MAX_HP = 50;
 const MAX_FILL = 100;
-const MAX_GESTATION_TIME = 10;
+const MAX_GESTATION_TIME = 50;
+const VISION_RADIUS = 20;
 
-const GRASS_FILL_POINTS = 20;
+const GRASS_FILL_POINTS = 80;
 const CHROMOSOME_OUTPUT_LENGTH = 21;
 
 export class Rabbit extends Creature{
@@ -21,14 +23,18 @@ export class Rabbit extends Creature{
   private age = 0;
   private attackPower = 1;
   private defence = 1;
-  private gestation:boolean = false;
+  private gestationChromosome:Chromosome | undefined;
   private gestationTime = 0;
+  private sexRequestedPartner:Rabbit | undefined;
 
   private chromosomeInput:Float32Array;
+  private idFactoryMethod:()=>number;
 
 
-  constructor(sex:number, chromosomeFactory:(options:any)=>Chromosome){
+  constructor(sex:number, idFactoryMethod:()=>number, chromosomeFactory:(options:any)=>Chromosome){
     super();
+    this.idFactoryMethod = idFactoryMethod;
+    this.id = idFactoryMethod();
     this.chromosome = chromosomeFactory({
        inputSize:CHROMOSOME_INPUT_LENGHT,
        innerSize:CHROMOSOME_OUTPUT_LENGTH,
@@ -37,7 +43,24 @@ export class Rabbit extends Creature{
     this.type = (sex)?EntityTypes.RABBIT_M:EntityTypes.RABBIT_F;
     this.healthPoints = MAX_HP;
     this.fill = MAX_FILL;
+    this.visionRadius = VISION_RADIUS;
     this.chromosomeInput = new Float32Array(CHROMOSOME_INPUT_LENGHT);
+  }
+
+  public onSexRequest(from:Creature){
+    if(from.type === EntityTypes.RABBIT_F ||
+        from.type === EntityTypes.RABBIT_M){
+          this.sexRequestedPartner = <Rabbit>from;
+        }
+  }
+
+  public onCoition(partner:Rabbit){
+    if(partner.type === EntityTypes.RABBIT_M &&
+    this.type  === EntityTypes.RABBIT_F &&
+    (!this.gestationChromosome) && this.age >= MIN_SEX_AGE){
+      this.gestationChromosome = this.chromosome.cross(partner.chromosome);
+      this.gestationTime = 0;
+    }
   }
 
   process(nearEntities:Entity[]){
@@ -52,6 +75,16 @@ export class Rabbit extends Creature{
     if(this.age>MAX_AGE || this.healthPoints <= 0){
       this.die();
       return;
+    }
+    if(this.gestationChromosome && (this.gestationTime++) > MAX_GESTATION_TIME){
+      var newRabbitChromosome = this.gestationChromosome;
+      this.gestationChromosome = undefined;
+      var newRabbit = new Rabbit( Math.round(Math.random()),
+                      this.idFactoryMethod,
+                      ()=>{return newRabbitChromosome});
+      newRabbit.posX = this.posX;
+      newRabbit.posY = this.posY;
+      this.onCreatureMade(newRabbit);
     }
     nearEntities.sort((a,b)=>{
       var adx = this.posX - a.posX;
@@ -73,7 +106,6 @@ export class Rabbit extends Creature{
   }
 
   private prepareInputs(nearEntities:Entity[]){
-
     const RECORD_SIZE = 6;
     var entitiesToInput = Math.min(MAX_VISIBLE_OBJECTS_COUNT, nearEntities.length);
     for(var i=0; i< entitiesToInput; i++){
@@ -89,16 +121,26 @@ export class Rabbit extends Creature{
     this.chromosomeInput[positionAfterObjects + 1] = this.age/MAX_AGE
     this.chromosomeInput[positionAfterObjects + 2] = this.fill/MAX_FILL;
     this.chromosomeInput[positionAfterObjects + 3] = (this.type === EntityTypes.RABBIT_M)?1:0;
-    this.chromosomeInput[positionAfterObjects + 4] = (this.gestation)?1:0;
+    this.chromosomeInput[positionAfterObjects + 4] = (this.gestationChromosome)?1:0;
     this.chromosomeInput[positionAfterObjects + 5] = this.gestationTime/MAX_GESTATION_TIME;
   }
 
-  processOperation(operation:number, param:number, nearEntities:Entity[]){
+  private processOperation(operation:number, param:number, nearEntities:Entity[]){
     switch(operation){
       case 1:
         if(nearEntities[param]){
           this.EatObject(nearEntities[param]);
         }
+      break;
+
+      case 2:
+        if(nearEntities[param]){
+          this.doSexRequest(nearEntities[param]);
+        }
+      break;
+
+      case 3:
+        this.approveSexRequest();
       break;
 
       default:
@@ -108,7 +150,8 @@ export class Rabbit extends Creature{
   }
 
   private EatObject(object:Entity){
-    if(object.type === EntityTypes.FOOD_GRASS){
+    if(object.type === EntityTypes.FOOD_GRASS &&
+      this.getDistanceTo(object) <= this.actRadius){
       this.fill = Math.max(this.fill + GRASS_FILL_POINTS, MAX_FILL);
       this.onObjectPickup(object);
     }
@@ -128,6 +171,27 @@ export class Rabbit extends Creature{
     this.posX += x;
     this.posY += y;
   }
+
+  private doSexRequest(object:any){
+    if(object instanceof Rabbit
+    && this.getDistanceTo(object) <= this.actRadius
+    && this.age >= MIN_SEX_AGE){
+      object.onSexRequest(<Rabbit>this);
+    }
+  }
+
+  private approveSexRequest(){
+    if(this.sexRequestedPartner &&
+      this.getDistanceTo(this.sexRequestedPartner) < this.actRadius){
+      this.onCoition(this.sexRequestedPartner);
+      this.sexRequestedPartner.onCoition(this);
+    }
+  }
+
+  private getDistanceTo(entity:Entity){
+    return Math.hypot(this.posX - entity.posX, this.posY - entity.posY);
+  }
+
 }
 
 function findMaxElementIndex(array:Float32Array, fromIndex:number, toIndex:Number){
