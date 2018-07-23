@@ -33,14 +33,28 @@ export class SceneManager{
   }
 
   private createMesh(objectType:number){
-    if(objectType === EntityTypes.RABBIT_F || objectType === EntityTypes.RABBIT_M ){
-      var mesh = new THREE.Mesh(new THREE.SphereGeometry(0.3),new THREE.MeshLambertMaterial( {
-              color: 0x118855 }) );
-    }else{
-      var mesh = new THREE.Mesh(new THREE.SphereGeometry(0.3),new THREE.MeshLambertMaterial( {
-              color: 0x111111 }) );
-    }
+    var mesh:THREE.Mesh;
+    switch(objectType){
+      case EntityTypes.RABBIT_F:
+        mesh = new THREE.Mesh(new THREE.SphereGeometry(0.3),new THREE.MeshLambertMaterial( {
+              color: 0x115588 }));
+      break;
 
+      case EntityTypes.RABBIT_M:
+        mesh = new THREE.Mesh(new THREE.SphereGeometry(0.3),new THREE.MeshLambertMaterial( {
+              color: 0x118855 }) );
+      break;
+
+      case EntityTypes.FOOD_GRASS:
+        mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry( 1, 1),new THREE.MeshLambertMaterial( {
+              color: 0x55AA55 }) );
+      break;
+
+      default:
+        mesh = new THREE.Mesh(new THREE.SphereGeometry(0.3),new THREE.MeshLambertMaterial( {
+              color: 0x111111 }) );
+      break;
+    }
     return mesh;
   }
 

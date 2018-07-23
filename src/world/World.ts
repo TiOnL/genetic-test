@@ -1,24 +1,39 @@
 import {Creature, Rabbit} from "./creatures/creatures";
-import {SceneObject} from "../common/common";
-import {CircularList, CircularListNode} from "../common/common";
+import {SceneObject, CircularList, CircularListNode, EntityTypes} from "../common/common";
 import {Entity} from "./Entity";
 import {Neural3L} from "../chromosomes/chromosomes";
+import {IdFactory} from "./idfactory/IdFactory";
 
 export class World{
   private processCreaturesQuotaPerTick = 0.3;
   private creatures:CircularList<Creature>;
   private currentCreatureNode:CircularListNode<Creature>|undefined;
+  private items:Array<Entity>;
+  private idFactory:IdFactory;
+  private tickNumber = 0;
 
   constructor(){
     this.creatures = new CircularList();
+    this.items = new Array();
+    this.idFactory = new IdFactory();
   }
 
   public tickUpdate(){
     this.processCreatures();
+
+    if(this.tickNumber % 3 === 0){
+      var grassFood:Entity = {
+        id:this.idFactory.generateId(),
+        type: EntityTypes.FOOD_GRASS,
+        posX:Math.random()*50,
+        posY:Math.random()*50
+      }
+      this.items.push(grassFood);  
+    }
+    this.tickNumber ++;
   }
 
-  public getSceneObjectsNearXY(x:number, y:number, distance:number):
-                      {id:number, posX:number, posY:number, type:number}[]{
+  public getSceneObjectsNearXY(x:number, y:number, distance:number):SceneObject[]{
     var entities = this.getNearEntities(x,y,distance);
     return entities.map( entity=>{
       return {id:entity.id, posX:entity.posX, posY: entity.posY, type:entity.type};
@@ -27,12 +42,23 @@ export class World{
   }
 
   public load(){
-    for(var i=0; i<500; i++){
+    for(var i=0; i < 500; i++){
       var creature = new Rabbit(0,options=>new Neural3L(options).randomize());
-      creature.id = i;
-      creature.posX = Math.random()*150;
+      creature.id = this.idFactory.generateId();
+      creature.posX = Math.random()*50;
       creature.posY = Math.random()*50;
+      creature.onObjectPickup = this.deleteItem.bind(this);
       this.creatures.add(creature);
+    }
+
+    for(var i=0; i < 20; i++){
+      var grassFood:Entity = {
+        id:this.idFactory.generateId(),
+        type: EntityTypes.FOOD_GRASS,
+        posX:Math.random()*50,
+        posY:Math.random()*50
+      }
+      this.items.push(grassFood);
     }
 
   }
@@ -61,13 +87,24 @@ export class World{
 
   private getNearEntities(x:number , y:number, distance:number, excludeEntity?:Entity){
     var distance2 = distance*distance;
-    var result:Entity[] = this.creatures.filterToArray((value)=>{
+    var distanceFilter = function name(value:Entity) {
       var dx = value.posX-x;
       var dy = value.posY-y
       return ((dx*dx + dy*dy <= distance2) && (excludeEntity != value));
-    });
+    }
+    var result:Entity[] = this.creatures.filterToArray(distanceFilter);
+    var nearItems = this.items.filter(distanceFilter)
+    result = result.concat(nearItems);
     return result;
   }
 
+  private deleteItem(entity:Entity){
+    var foundIndex = this.items.findIndex((el)=>(el.id === entity.id));
+    if(foundIndex < 0){
+      throw new Error("deleteItem: item not found " + JSON.stringify(entity));
+    }
+    this.items[foundIndex] = this.items[this.items.length -1];
+    this.items.pop();
+  }
 
 }
