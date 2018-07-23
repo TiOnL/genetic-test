@@ -25,8 +25,8 @@ export class World{
       var grassFood:Entity = {
         id:this.idFactory.generateId(),
         type: EntityTypes.FOOD_GRASS,
-        posX:Math.random()*60,
-        posY:Math.random()*60
+        posX:Math.random()*50,
+        posY:Math.random()*50
       }
       this.items.push(grassFood);
     }

@@ -1,6 +1,8 @@
 import {SceneManager} from "./ui/SceneManager"
 import {World} from "./world/World"
 import * as THREE from "three";
+import {FlyCameraControls} from "./ui/FlyCameraControls";
+
 declare const webGlDiv:HTMLDivElement;
 var scene: THREE.Scene;
 var camera: THREE.PerspectiveCamera;
@@ -8,8 +10,8 @@ var renderer: THREE.WebGLRenderer;
 var sceneManager:SceneManager;
 var stats:Stats;
 var world:World;
-
-const VISIBLE_DISTANCE = 100;
+var cameraControls:FlyCameraControls;
+const VISIBLE_DISTANCE = 200;
 
 
 
@@ -18,8 +20,9 @@ function initialize(){
  // camera
  camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0.1, 10000 );
  camera.up = new THREE.Vector3( 0, 0, 1 );
- camera.position.set( 50, 50, 250 );
- camera.lookAt(40,40,0);
+ camera.position.set( 0, 0, 30 );
+ camera.lookAt(40,0,0);
+ cameraControls = new FlyCameraControls(camera, webGlDiv);
  // lights
  scene.add( new THREE.AmbientLight( 0x333333 ) );
  renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -62,6 +65,7 @@ function animate() {
 
 //	editor.animate();
 	world.tickUpdate();
+  cameraControls.tickUpdate();
 sceneManager.updateObjects(world.getSceneObjectsNearXY(camera.position.x, camera.position.y, VISIBLE_DISTANCE));//TODO put actual objects
 	stats.update();
 

@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import {SceneObject, EntityTypes} from "../common/common";
 
+
 export class SceneManager{
   private scene:THREE.Scene;
   private objectMeshes:Map<number, THREE.Mesh>;
