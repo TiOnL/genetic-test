@@ -6,8 +6,8 @@ import {Chromosome} from "../../chromosomes/Chromosome"
 const CHROMOSOME_INPUT_LENGHT = 100;
 const MAX_VISIBLE_OBJECTS_COUNT = 10;
 const MAX_AGE = 500;
-const MIN_SEX_AGE = 100;
-const MAX_SPEED = 0.3;
+const MIN_SEX_AGE = 200;
+const MAX_SPEED = 0.5;
 const MAX_HP = 50;
 const MAX_FILL = 100;
 const MAX_GESTATION_TIME = 50;
