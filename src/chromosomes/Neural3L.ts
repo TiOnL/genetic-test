@@ -79,7 +79,7 @@ export class Neural3L implements Chromosome{
     });
   }
 
-  cross(chromosome:Neural3L){
+  public cross(chromosome:Neural3L){
     var options = {inputSize:this.inputSize, innerSize:this.innerLayerSize, outputSize:this.outputSize};
     var newChromosome = new Neural3L(options);
     var data1 = this.getDataAsArray();
@@ -91,6 +91,21 @@ export class Neural3L implements Chromosome{
     }
     newChromosome.setDataFromArray(data1);
     return newChromosome;
+  }
+
+  public computeDistance(partner:Neural3L){
+    var myData = this.getDataAsArray();
+    var partnerData = partner.getDataAsArray();
+    if(myData.length != partnerData.length){
+      return 1;
+    }
+    var differents = 0;
+    for(var i = 0; i < myData.length; i++){
+      if(myData[i] != partnerData[i]){
+        differents++;
+      }
+    }
+    return differents/myData.length;
   }
 
   private iterateData(callback:(element:number)=>number){
