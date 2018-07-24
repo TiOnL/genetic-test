@@ -56,10 +56,18 @@ export class Neural3L implements Chromosome{
     return this.outputLayer.buffer;
   };
 
-  randomize(){
+  public randomize(){
     this.iterateData((value)=>{
       return Math.random()-0.5;
     });
+    return this;
+  }
+  public mutate(count = 1, power = 0.5){
+    var dataArray = this.getDataAsArray();
+    for(var i = 0; i< count; i++){
+      dataArray[Math.floor(Math.random() * dataArray.length)] += Math.random() * power;
+    }
+    this.setDataFromArray(dataArray);
     return this;
   }
 
