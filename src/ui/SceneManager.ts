@@ -38,12 +38,12 @@ export class SceneManager{
     switch(objectType){
       case EntityTypes.RABBIT_F:
         mesh = new THREE.Mesh(new THREE.SphereGeometry(0.3),new THREE.MeshLambertMaterial( {
-              color: 0x115588 }));
+              color: 0xFF7777 }));
       break;
 
       case EntityTypes.RABBIT_M:
         mesh = new THREE.Mesh(new THREE.SphereGeometry(0.3),new THREE.MeshLambertMaterial( {
-              color: 0x118855 }) );
+              color: 0x115588 }) );
       break;
 
       case EntityTypes.FOOD_GRASS:
