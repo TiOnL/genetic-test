@@ -1,6 +1,8 @@
 import {World} from "../world/World";
 import {FlyCameraControls} from "./FlyCameraControls";
-import {SceneManager} from "./SceneManager"
+import {SceneManager} from "./SceneManager";
+import {MainPanel} from "./MainPanel";
+import {EventTypes} from "../common/EventTypes"
 import * as THREE from "three";
 
 const VISIBLE_DISTANCE = 200;
@@ -12,6 +14,9 @@ export class Ui{
   private renderer: THREE.WebGLRenderer;
   private sceneManager:SceneManager;
   private cameraControls:FlyCameraControls;
+  private mainPanel:MainPanel;
+
+  public onUiEvent:(eventType:number, payload?:any)=>void = function(){throw new Error("you should override Ui.onUiEvent()")};
 
   constructor(viewport:HTMLDivElement){
     this.viewport = viewport;
@@ -20,6 +25,9 @@ export class Ui{
     this.cameraControls = new FlyCameraControls(this.camera, viewport);
     this.renderer = new THREE.WebGLRenderer( { antialias: true } );
     this.sceneManager = new SceneManager(this.scene);
+    this.mainPanel = new MainPanel();
+    this.viewport.appendChild( this.renderer.domElement );
+    this.viewport.appendChild( this.mainPanel.domElement );
     this.initialize();
   }
 
@@ -30,19 +38,19 @@ export class Ui{
 
    // lights
    this.scene.add( new THREE.AmbientLight( 0x333333 ) );
-   this.renderer = new THREE.WebGLRenderer( { antialias: true } );
    var light = new THREE.DirectionalLight( 0xffffff, 1 );
          light.position.set( 10, 1, 100 );
          this.scene.add( light );
    this.renderer.setPixelRatio( window.devicePixelRatio );
    this.renderer.setSize( window.innerWidth, window.innerHeight );
-   this.viewport.appendChild( this.renderer.domElement );
+
    window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
    //0 cube
    var cube = new THREE.Mesh(new THREE.CubeGeometry(1,1,1),new THREE.MeshPhongMaterial( {
            color: 0x111155, shininess: 200,
            side: THREE.DoubleSide }) );
    this.scene.add(cube);
+   this.mainPanel.onBtnRandomSpawn = ()=>this.onUiEvent(EventTypes.BTN_RANDOM_SPAWN);
   }
 
   private onWindowResize() {

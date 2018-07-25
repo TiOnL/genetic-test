@@ -1,6 +1,6 @@
 import {Ui} from "./ui/Ui"
 import {World} from "./world/World"
-import * as THREE from "three";
+import {EventTypes} from "./common/EventTypes";
 
 declare const viewport:HTMLDivElement;
 
@@ -16,6 +16,7 @@ function initialize(){
  stats = new Stats();
  document.body.appendChild( stats.dom );
  ui = new Ui(viewport);
+ ui.onUiEvent = UiController;
  //editor = new Editor(viewport);
  world = new World();
  world.load();
@@ -25,11 +26,26 @@ function initialize(){
 
 window.onload = initialize;
 
+
 function animate() {
 	requestAnimationFrame( animate );
 //	editor.animate();
 	world.tickUpdate();
   ui.update(world);
   stats.update();
+
+}
+
+var UiController = (eventType:number, payload?:any)=>{
+  switch(eventType){
+    case EventTypes.BTN_RANDOM_SPAWN:
+      world.spawnRandom(100);
+    break;
+
+    default:
+      throw new Error("UiController wrong event type:" + eventType);
+    break;
+  }
+
 
 }

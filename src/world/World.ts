@@ -42,15 +42,6 @@ export class World{
   }
 
   public load(){
-    for(var i=0; i < 500; i++){
-      var creature = new Rabbit(Math.round(Math.random()),
-            ()=>this.idFactory.generateId(),
-            (options)=>new Neural3L(options).randomize());
-      creature.posX = Math.random()*50;
-      creature.posY = Math.random()*50;
-      this.addCreature(creature);
-    }
-
     for(var i=0; i < 100; i++){
       var grassFood:Entity = {
         id:this.idFactory.generateId(),
@@ -60,7 +51,17 @@ export class World{
       }
       this.items.push(grassFood);
     }
+  }
 
+  public spawnRandom(quantity:number){
+    for(var i=0; i < quantity; i++){
+      var creature = new Rabbit(Math.round(Math.random()),
+            ()=>this.idFactory.generateId(),
+            (options)=>new Neural3L(options).randomize());
+      creature.posX = Math.random()*50;
+      creature.posY = Math.random()*50;
+      this.addCreature(creature);
+    }
   }
 
   private processCreatures(){
