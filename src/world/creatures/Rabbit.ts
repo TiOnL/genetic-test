@@ -63,6 +63,16 @@ export class Rabbit extends Creature{
     }
   }
 
+  public clone(){
+    var newChromosome = this.chromosome.cross(this.chromosome);
+    var newRabbit = new Rabbit( Math.round(Math.random()),
+                    this.idFactoryMethod,
+                    ()=>{return newChromosome});
+    newRabbit.posX = this.posX;
+    newRabbit.posY = this.posY;
+    return newRabbit;
+  }
+
   process(nearEntities:Entity[]){
     this.age++;
     this.fill--;

@@ -51,6 +51,7 @@ export class Ui{
            side: THREE.DoubleSide }) );
    this.scene.add(cube);
    this.mainPanel.onBtnRandomSpawn = ()=>this.onUiEvent(EventTypes.BTN_RANDOM_SPAWN);
+   this.mainPanel.onBtnDoubleAlive = ()=>this.onUiEvent(EventTypes.BTN_DOUBLE_ALIVE);
   }
 
   private onWindowResize() {
@@ -63,6 +64,8 @@ export class Ui{
     this.cameraControls.tickUpdate();
     this.sceneManager.updateObjects(world.getSceneObjectsNearXY(this.camera.position.x,
                     this.camera.position.y, VISIBLE_DISTANCE));
+    var creatureCount = world.getAliveCreatureCount();
+    this.mainPanel.update(creatureCount);
     this.renderer.render( this.scene, this.camera );
   }
 

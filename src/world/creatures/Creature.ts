@@ -29,5 +29,9 @@ export class Creature implements Entity{
     return this.id;
   }
 
+  public clone():Creature{
+    return new Creature();
+  }
+
 
 }

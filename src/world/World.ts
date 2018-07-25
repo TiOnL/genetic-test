@@ -64,6 +64,22 @@ export class World{
     }
   }
 
+  public doubleAliveCreatures(){
+    var newCreatures:Creature[] = [];
+    this.creatures.forEach((creature)=>{
+      newCreatures.push(creature.clone());
+    });
+    for(var creature of newCreatures){
+      creature.posX = Math.random()*50;
+      creature.posY = Math.random()*50;
+      this.addCreature(creature);
+    }
+  }
+
+  public getAliveCreatureCount(){
+    return this.creatures.getSize();
+  }
+
   private processCreatures(){
     var currentNode= this.currentCreatureNode || this.creatures.getLastAddedNode();
     if(currentNode){

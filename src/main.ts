@@ -42,6 +42,10 @@ var UiController = (eventType:number, payload?:any)=>{
       world.spawnRandom(100);
     break;
 
+    case EventTypes.BTN_DOUBLE_ALIVE:
+      world.doubleAliveCreatures();
+    break;
+
     default:
       throw new Error("UiController wrong event type:" + eventType);
     break;
