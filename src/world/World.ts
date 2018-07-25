@@ -25,8 +25,8 @@ export class World{
       var grassFood:Entity = {
         id:this.idFactory.generateId(),
         type: EntityTypes.FOOD_GRASS,
-        posX:Math.random()*50,
-        posY:Math.random()*50
+        posX:Math.random()*100-25,
+        posY:Math.random()*100-25
       }
       this.items.push(grassFood);
     }
@@ -67,7 +67,7 @@ export class World{
   public doubleAliveCreatures(){
     var newCreatures:Creature[] = [];
     this.creatures.forEach((creature)=>{
-      newCreatures.push(creature.clone());
+      newCreatures.push(creature.clone(1,1));
     });
     for(var creature of newCreatures){
       creature.posX = Math.random()*50;

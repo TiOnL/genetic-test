@@ -29,7 +29,7 @@ export class Creature implements Entity{
     return this.id;
   }
 
-  public clone():Creature{
+  public clone(mutationCount?:number, mutationPower?:number):Creature{
     return new Creature();
   }
 

@@ -6,14 +6,14 @@ import {Chromosome} from "../../chromosomes/Chromosome"
 const CHROMOSOME_INPUT_LENGHT = 100;
 const MAX_VISIBLE_OBJECTS_COUNT = 10;
 const MAX_AGE = 500;
-const MIN_SEX_AGE = 200;
+const MIN_SEX_AGE = 60;
 const MAX_SPEED = 0.5;
 const MAX_HP = 50;
-const MAX_FILL = 100;
+const MAX_FILL = 50;
 const MAX_GESTATION_TIME = 50;
 const VISION_RADIUS = 20;
 
-const GRASS_FILL_POINTS = 80;
+const GRASS_FILL_POINTS = 25;
 const CHROMOSOME_OUTPUT_LENGTH = 21;
 
 export class Rabbit extends Creature{
@@ -59,12 +59,16 @@ export class Rabbit extends Creature{
     this.type  === EntityTypes.RABBIT_F &&
     (!this.gestationChromosome) && this.age >= MIN_SEX_AGE){
       this.gestationChromosome = this.chromosome.cross(partner.chromosome);
+      this.gestationChromosome.mutate();
       this.gestationTime = 0;
     }
   }
 
-  public clone(){
+  public clone(mutationCount?:number, mutationPower?:number){
     var newChromosome = this.chromosome.cross(this.chromosome);
+    if(mutationCount){
+      newChromosome.mutate(mutationCount, mutationPower);
+    }
     var newRabbit = new Rabbit( Math.round(Math.random()),
                     this.idFactoryMethod,
                     ()=>{return newChromosome});

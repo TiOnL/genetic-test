@@ -5,7 +5,7 @@ import {MainPanel} from "./MainPanel";
 import {EventTypes} from "../common/EventTypes"
 import * as THREE from "three";
 
-const VISIBLE_DISTANCE = 200;
+const VISIBLE_DISTANCE = 1000;
 
 export class Ui{
   private viewport:HTMLDivElement;

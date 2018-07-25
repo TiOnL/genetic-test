@@ -30,6 +30,9 @@ window.onload = initialize;
 function animate() {
 	requestAnimationFrame( animate );
 //	editor.animate();
+ if(world.getAliveCreatureCount() < 50){
+    world.doubleAliveCreatures();
+}
 	world.tickUpdate();
   ui.update(world);
   stats.update();
