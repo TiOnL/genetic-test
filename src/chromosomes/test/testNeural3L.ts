@@ -11,5 +11,11 @@ describe("test Neural3L class",()=>{
     assert.isTrue(c3.computeDistance(c2) <= c1.computeDistance(c2));
   });
 
+  it("can clone using cross(self)", ()=>{
+      var c1 = new Neural3L({inputSize:10,innerSize:5, outputSize:10}).randomize();
+      var clone = c1.cross(c1);
+      assert.isTrue(c1.computeDistance(clone) === 0);
+  });
+
 
 });
