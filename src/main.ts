@@ -30,9 +30,6 @@ window.onload = initialize;
 function animate() {
 	requestAnimationFrame( animate );
 //	editor.animate();
- if(world.getAliveCreatureCount() < 50){
-    world.doubleAliveCreatures();
-}
 	world.tickUpdate();
   ui.update(world);
   stats.update();
@@ -47,6 +44,11 @@ var UiController = (eventType:number, payload?:any)=>{
 
     case EventTypes.BTN_DOUBLE_ALIVE:
       world.doubleAliveCreatures();
+    break;
+
+    case EventTypes.CHECKBOX_AUTO_CLONE:
+      var autoDoubleLimit = (payload)?50:0;
+      world.setAutoDoubleCreaturesLimit(autoDoubleLimit);
     break;
 
     default:

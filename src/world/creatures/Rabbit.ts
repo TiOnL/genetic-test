@@ -120,7 +120,8 @@ export class Rabbit extends Creature{
   }
 
   private prepareInputs(nearEntities:Entity[]){
-    const RECORD_SIZE = 6;
+    const RECORD_SIZE = 8;
+    this.chromosomeInput.fill(0);
     var entitiesToInput = Math.min(MAX_VISIBLE_OBJECTS_COUNT, nearEntities.length);
     for(var i=0; i< entitiesToInput; i++){
       this.chromosomeInput[i * RECORD_SIZE] = nearEntities[i].type & 1;
@@ -129,6 +130,9 @@ export class Rabbit extends Creature{
       this.chromosomeInput[i * RECORD_SIZE + 3] = nearEntities[i].type & 8;
       this.chromosomeInput[i * RECORD_SIZE + 4] = (nearEntities[i].posX - this.posX)/this.visionRadius;
       this.chromosomeInput[i * RECORD_SIZE + 5] = (nearEntities[i].posY - this.posY)/this.visionRadius;
+      this.chromosomeInput[i * RECORD_SIZE + 6] = ((<Rabbit>nearEntities[i]).age || 0)/MAX_AGE;
+      this.chromosomeInput[i * RECORD_SIZE + 7] = ((<Rabbit>nearEntities[i]).isGestiation)?
+        +(<Rabbit>nearEntities[i]).isGestiation():0;
     }
     var positionAfterObjects = MAX_VISIBLE_OBJECTS_COUNT*RECORD_SIZE;
     this.chromosomeInput[positionAfterObjects] = this.healthPoints/MAX_HP;
@@ -204,6 +208,10 @@ export class Rabbit extends Creature{
 
   private getDistanceTo(entity:Entity){
     return Math.hypot(this.posX - entity.posX, this.posY - entity.posY);
+  }
+
+  private isGestiation(){
+    return this.gestationChromosome?true:false;
   }
 
 }

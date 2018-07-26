@@ -7,7 +7,7 @@ export class Creature implements Entity{
   public posX = 0;
   public posY = 0;
   public visionRadius = 10;
-  public actRadius = 3;
+  public actRadius = 1;
   public isAlive = true;
 
   public onObjectPickup = function(entity:Entity){throw new Error("You should override onObjectPickup()")};

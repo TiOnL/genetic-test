@@ -11,6 +11,7 @@ export class World{
   private items:Array<Entity>;
   private idFactory:IdFactory;
   private tickNumber = 0;
+  private autoDoubleCreaturesLimit = 0;
 
   constructor(){
     this.creatures = new CircularList();
@@ -20,13 +21,15 @@ export class World{
 
   public tickUpdate(){
     this.processCreatures();
-
-    if(this.tickNumber % 2 === 0){
+    if(this.getAliveCreatureCount() < this.autoDoubleCreaturesLimit){
+      this.doubleAliveCreatures();
+    }
+    if(this.tickNumber % 3 === 0){
       var grassFood:Entity = {
         id:this.idFactory.generateId(),
         type: EntityTypes.FOOD_GRASS,
-        posX:Math.random()*100-25,
-        posY:Math.random()*100-25
+        posX:Math.random()*50,
+        posY:Math.random()*50
       }
       this.items.push(grassFood);
     }
@@ -42,7 +45,7 @@ export class World{
   }
 
   public load(){
-    for(var i=0; i < 100; i++){
+    for(var i=0; i < 1; i++){
       var grassFood:Entity = {
         id:this.idFactory.generateId(),
         type: EntityTypes.FOOD_GRASS,
@@ -67,7 +70,7 @@ export class World{
   public doubleAliveCreatures(){
     var newCreatures:Creature[] = [];
     this.creatures.forEach((creature)=>{
-      newCreatures.push(creature.clone(1,1));
+      newCreatures.push(creature.clone(1,0.1));
     });
     for(var creature of newCreatures){
       creature.posX = Math.random()*50;
@@ -78,6 +81,10 @@ export class World{
 
   public getAliveCreatureCount(){
     return this.creatures.getSize();
+  }
+
+  public setAutoDoubleCreaturesLimit(limit:number){
+    this.autoDoubleCreaturesLimit = limit;
   }
 
   private processCreatures(){
