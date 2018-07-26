@@ -12,6 +12,7 @@ export class World{
   private idFactory:IdFactory;
   private tickNumber = 0;
   private autoDoubleCreaturesLimit = 0;
+  private maxItemsCount = 1000;
 
   constructor(){
     this.creatures = new CircularList();
@@ -24,7 +25,7 @@ export class World{
     if(this.getAliveCreatureCount() < this.autoDoubleCreaturesLimit){
       this.doubleAliveCreatures();
     }
-    if(this.tickNumber % 3 === 0){
+    if(this.tickNumber % 3 === 0 && this.items.length<=this.maxItemsCount){
       var grassFood:Entity = {
         id:this.idFactory.generateId(),
         type: EntityTypes.FOOD_GRASS,
