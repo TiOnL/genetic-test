@@ -11,7 +11,8 @@ export class Neural3L implements Chromosome{
   private outputLayer:Float32Array;
   private M1:Array<Float32Array>;
   private M2:Array<Float32Array>;
-  private activationFunction = (x:number)=>{return 1.2*x/(Math.abs(x)+0.5)};
+  private activationFunction = (x:number)=>{return 2/(1+Math.exp(-4.9*x))-1};
+    // (x:number)=>{return 1.2*x/(Math.abs(x)+0.5)};
 
   constructor(options:{inputSize?:number, innerSize?:number, outputSize?:number}){
     this.inputSize = options["inputSize"] || LAYER_DEFAULT_SIZE;
