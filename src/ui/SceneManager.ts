@@ -29,6 +29,8 @@ export class SceneManager{
       if(!updatedIds.has(el[0])){
         this.scene.remove(el[1]);
         this.objectMeshes.delete(el[0]);
+        el[1].geometry.dispose();
+        (<THREE.Material>el[1].material).dispose();
       }
     }
   }
