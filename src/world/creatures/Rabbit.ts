@@ -26,6 +26,7 @@ export class Rabbit extends Creature{
   private gestationChromosome:Chromosome | undefined;
   private gestationTime = 0;
   private sexRequestedPartner:Rabbit | undefined;
+  private recurrentValue = 0;
 
   private chromosomeInput:Float32Array;
   private idFactoryMethod:()=>number;
@@ -113,7 +114,8 @@ export class Rabbit extends Creature{
     var output = new Float32Array(outputBuffer);
     var moveX = output[0];
     var moveY = output[1];
-    var operation = findMaxElementIndex(output, 2, 10) - 2;
+    this.recurrentValue = output[2];
+    var operation = findMaxElementIndex(output, 3, 10) - 3;
     var param = findMaxElementIndex(output, 11, CHROMOSOME_OUTPUT_LENGTH - 1) - 11;
     this.processOperation(operation, param, nearEntities);
     this.move(moveX, moveY);
@@ -141,6 +143,7 @@ export class Rabbit extends Creature{
     this.chromosomeInput[positionAfterObjects + 3] = (this.type === EntityTypes.RABBIT_M)?1:0;
     this.chromosomeInput[positionAfterObjects + 4] = (this.gestationChromosome)?1:0;
     this.chromosomeInput[positionAfterObjects + 5] = this.gestationTime/MAX_GESTATION_TIME;
+    this.chromosomeInput[positionAfterObjects + 6] = this.recurrentValue;
   }
 
   private processOperation(operation:number, param:number, nearEntities:Entity[]){
