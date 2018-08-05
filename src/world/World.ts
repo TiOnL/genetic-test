@@ -11,7 +11,8 @@ export class World{
   private items:Array<Entity>;
   private idFactory:IdFactory;
   private tickNumber = 0;
-  private autoDoubleCreaturesLimit = 0;
+  private autoCloneCreaturesStartLimit = 0;
+  private autoCloneCreaturesStopLimit = 0;
   private maxItemsCount = 1000;
 
   constructor(){
@@ -22,8 +23,11 @@ export class World{
 
   public tickUpdate(){
     this.processCreatures();
-    if(this.getAliveCreatureCount() < this.autoDoubleCreaturesLimit){
-      this.doubleAliveCreatures();
+    if(this.getAliveCreatureCount() > 0 &&
+     this.getAliveCreatureCount() < this.autoCloneCreaturesStartLimit){
+      while(this.getAliveCreatureCount() < this.autoCloneCreaturesStopLimit){
+            this.doubleAliveCreatures();
+      }
     }
     if(this.tickNumber % 3 === 0 && this.items.length<=this.maxItemsCount){
       var grassFood:Entity = {
@@ -84,8 +88,9 @@ export class World{
     return this.creatures.getSize();
   }
 
-  public setAutoDoubleCreaturesLimit(limit:number){
-    this.autoDoubleCreaturesLimit = limit;
+  public setAutoDoubleCreaturesLimit(low:number, high:number){
+    this.autoCloneCreaturesStartLimit = low;
+    this.autoCloneCreaturesStopLimit = high;
   }
 
   private processCreatures(){

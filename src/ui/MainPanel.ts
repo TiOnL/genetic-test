@@ -13,7 +13,7 @@ export class MainPanel{
     this.domElement.innerHTML = `Creatures:<span > - </span>
     <button class = "button1">Spawn random</button>
     <button class = "button2">Double alive</button>
-    <input type=checkbox class= "checkbox1"> Auto clone if < 50</input>`;
+    <input type=checkbox class= "checkbox1"> Auto clone </input>`;
     this.domElement.setAttribute("style", `
           position:fixed;
           bottom:10px;

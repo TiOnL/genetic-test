@@ -47,8 +47,8 @@ var UiController = (eventType:number, payload?:any)=>{
     break;
 
     case EventTypes.CHECKBOX_AUTO_CLONE:
-      var autoDoubleLimit = (payload)?50:0;
-      world.setAutoDoubleCreaturesLimit(autoDoubleLimit);
+      var autoDoubleLimit = (payload)?20:0;
+      world.setAutoDoubleCreaturesLimit(autoDoubleLimit, autoDoubleLimit*5);
     break;
 
     default:
