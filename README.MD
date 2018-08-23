@@ -8,6 +8,8 @@ Each Rabbit has its own neural network brain, and can walk, eat grass and reprod
  - Typescript
  - Webpack
  - Three.js library
+ - mocha, chai
+ 
 
 #### Console commands
 - ```npm install``` - to install necessary dependencies.
@@ -27,3 +29,8 @@ Each Rabbit has its own neural network brain, and can walk, eat grass and reprod
 
 #### Built demo
   is here: https://tionl.github.io/genetic-demo/dst/
+
+### WebAssembly version
+  demo is here: https://tionl.github.io/genetic-demo/dst-wasm/
+
+  I used c++ and emscripten to make a WebAssembly version. Although I thought, that it should be much faster than JavaScript, really it is just a little bit faster in my Opera browser on Ubuntu.
