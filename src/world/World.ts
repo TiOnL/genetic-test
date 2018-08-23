@@ -5,7 +5,7 @@ import {Neural3L} from "../chromosomes/chromosomes";
 import {IdFactory} from "./idfactory/IdFactory";
 
 export class World{
-  private processCreaturesQuotaPerTick = 0.3;
+  private processCreaturesQuotaPerTick = 1.0;
   private creatures:CircularList<Creature>;
   private currentCreatureNode:CircularListNode<Creature>|undefined;
   private items:Array<Entity>;
